@@ -3,23 +3,25 @@ enum Direction {
     Up(u32),
     Down(u32),
 }
+impl std::str::FromStr for Direction {
+    type Err = std::io::Error;
 
-fn parse_input(input: &str) -> Vec<Direction> {
-    input
-        .lines()
-        .map(|line| line.split_once(' ').unwrap())
-        .map(|(dir, num)| match dir {
-            "forward" => Direction::Forward(num.parse::<u32>().unwrap()),
-            "up" => Direction::Up(num.parse::<u32>().unwrap()),
-            "down" => Direction::Down(num.parse::<u32>().unwrap()),
-            _ => panic!("unsupported input {}", dir),
-        })
-        .collect()
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let (cmd, num) = s.split_once(' ').unwrap();
+        let num = num.parse::<u32>().unwrap();
+        match cmd {
+            "forward" => Ok(Direction::Forward(num)),
+            "up" => Ok(Direction::Up(num)),
+            "down" => Ok(Direction::Down(num)),
+            _ => panic!("unsupported input {}", cmd),
+        }
+    }
 }
-fn part1(directions: &[Direction]) -> u32 {
+fn part1(input: &str) -> u32 {
     let mut hz_pos = 0;
     let mut depth = 0;
-    for direction in directions {
+    for line in input.lines() {
+        let direction = line.parse().unwrap();
         match direction {
             Direction::Forward(num) => hz_pos += num,
             Direction::Up(num) => depth -= num,
@@ -28,11 +30,12 @@ fn part1(directions: &[Direction]) -> u32 {
     }
     hz_pos * depth
 }
-fn part2(directions: &[Direction]) -> u32 {
+fn part2(input: &str) -> u32 {
     let mut hz_pos = 0;
     let mut depth = 0;
     let mut aim = 0;
-    for direction in directions {
+    for line in input.lines() {
+        let direction = line.parse().unwrap();
         match direction {
             Direction::Forward(num) => {
                 hz_pos += num;
@@ -47,9 +50,8 @@ fn part2(directions: &[Direction]) -> u32 {
 
 fn main() {
     let input = include_str!("input.txt");
-    let directions = parse_input(input);
-    println!("{}", part1(&directions));
-    println!("{}", part2(&directions));
+    println!("{}", part1(input));
+    println!("{}", part2(input));
 }
 
 #[cfg(test)]
@@ -59,14 +61,12 @@ mod tests {
     #[test]
     fn test_part1() {
         let input = include_str!("test_input.txt");
-        let directions = parse_input(input);
-        assert_eq!(part1(&directions), 150);
+        assert_eq!(part1(input), 150);
     }
 
     #[test]
     fn test_part2() {
         let input = include_str!("test_input.txt");
-        let directions = parse_input(input);
-        assert_eq!(part2(&directions), 900);
+        assert_eq!(part2(input), 900);
     }
 }
