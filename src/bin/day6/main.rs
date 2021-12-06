@@ -1,45 +1,29 @@
 fn part1(input: &str) -> usize {
-    let mut lanternfish: Vec<usize> = vec![0; 9];
+    let mut lanternfish_state = [0; 9];
 
-    for item in input.split(',') {
-        lanternfish[item.parse::<usize>().unwrap()] += 1;
+    for state in input.split(',') {
+        lanternfish_state[state.parse::<usize>().unwrap()] += 1;
     }
 
     for _ in 1..=80 {
-        for (idx, num) in lanternfish.clone().into_iter().enumerate() {
-            if idx == 0 {
-                lanternfish[8] += num;
-                lanternfish[6] += num;
-                lanternfish[0] -= num;
-                continue;
-            }
-            lanternfish[idx] -= num;
-            lanternfish[idx - 1] += num;
-        }
+        lanternfish_state.rotate_left(1);
+        lanternfish_state[6] += lanternfish_state[8]
     }
-    lanternfish.iter().sum()
+    lanternfish_state.iter().sum()
 }
 
 fn part2(input: &str) -> usize {
-    let mut lanternfish: Vec<usize> = vec![0; 9];
+    let mut lanternfish_state = [0; 9];
 
-    for item in input.split(',') {
-        lanternfish[item.parse::<usize>().unwrap()] += 1;
+    for state in input.split(',') {
+        lanternfish_state[state.parse::<usize>().unwrap()] += 1;
     }
 
     for _ in 1..=256 {
-        for (idx, num) in lanternfish.clone().into_iter().enumerate() {
-            if idx == 0 {
-                lanternfish[8] += num;
-                lanternfish[6] += num;
-                lanternfish[0] -= num;
-                continue;
-            }
-            lanternfish[idx] -= num;
-            lanternfish[idx - 1] += num;
-        }
+        lanternfish_state.rotate_left(1);
+        lanternfish_state[6] += lanternfish_state[8]
     }
-    lanternfish.iter().sum()
+    lanternfish_state.iter().sum()
 }
 
 fn main() {
