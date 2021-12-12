@@ -2,14 +2,14 @@ fn part1(input: &str) -> usize {
     todo!()
 }
 
-fn part2(input: &str) -> usize {
+fn part2(_input: &str) -> usize {
     todo!()
 }
 
 fn main() {
     let input = include_str!("input.txt");
     println!("{}", part1(input));
-    //println!("{}", part2(input));
+    println!("{}", part2(input));
 }
 
 #[cfg(test)]
